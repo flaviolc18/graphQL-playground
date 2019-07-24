@@ -2,6 +2,8 @@ GraphQL Playground
 
 to run:
 
-- yarn install
-- prisma deploy
-- yarn start
+```sh
+  yarn install
+  prisma deploy
+  yarn start
+```
