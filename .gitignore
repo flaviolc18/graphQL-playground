@@ -1,3 +1,6 @@
-node_modules
-src/generated
-yarn.lock
+server/node_modules
+server/src/generated
+server/yarn.lock
+client/node_modules
+client/src/generated
+client/yarn.lock
