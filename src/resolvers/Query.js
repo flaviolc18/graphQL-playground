@@ -1,9 +1,20 @@
-exports.feed = (parent, { filter, skip, first }, context, info) => {
+exports.feed = async (
+  parent,
+  { filter, skip, first, orderBy },
+  context,
+  info
+) => {
   const where = filter
     ? {
         OR: [{ description_contains: filter }, { url_contains: filter }]
       }
     : {};
 
-  return context.prisma.links({ where, skip, first });
+  const links = await context.prisma.links({ where, skip, first, orderBy });
+  const count = await context.prisma
+    .linksConnection({ where })
+    .aggregate()
+    .count();
+
+  return { links, count };
 };
