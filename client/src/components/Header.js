@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 
-const { AUTH_TOKEN } = require("../constants");
+import { AUTH_TOKEN } from "../constants";
 
 function Header({ history }) {
   const authToken = localStorage.getItem(AUTH_TOKEN);
