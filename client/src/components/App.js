@@ -1,8 +1,8 @@
 import React from "react";
-import "../styles/App.css";
+import LinkList from "./LinkList";
 
 function App() {
-  return <div className="app">HELLO WORLD</div>;
+  return <LinkList />;
 }
 
 export default App;
