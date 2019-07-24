@@ -5,13 +5,23 @@ import gql from "graphql-tag";
 import Link from "./Link";
 
 const FEED_QUERY = gql`
-  query {
+  {
     feed {
-      count
       links {
         id
-        description
+        createdAt
         url
+        description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
       }
     }
   }
@@ -26,8 +36,8 @@ function LinkList() {
 
         return (
           <div>
-            {data.feed.links.map(link => (
-              <Link key={link.id} link={link} />
+            {data.feed.links.map((link, index) => (
+              <Link key={link.id} link={link} index={index} />
             ))}
           </div>
         );
