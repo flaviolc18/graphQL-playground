@@ -1,13 +1,11 @@
 import React from "react";
-
 import { Mutation } from "react-apollo";
 
+import { VOTE_MUTATION } from "../resolvers";
 import { timeDifferenceForDate } from "../utils";
 import { AUTH_TOKEN } from "../constants";
 
-import { VOTE_MUTATION, FEED_QUERY } from "../resolvers";
-
-function Link({ link, index }) {
+function Link({ link, index, updateStoreAfterVote }) {
   const authToken = localStorage.getItem(AUTH_TOKEN);
   return (
     <div className="flex mt2 items-start">
@@ -17,16 +15,7 @@ function Link({ link, index }) {
           <Mutation
             mutation={VOTE_MUTATION}
             variables={{ linkId: link.id }}
-            update={(store, { data: { vote } }) => {
-              const data = store.readQuery({ query: FEED_QUERY });
-
-              const votedLink = data.feed.links.find(
-                ({ id }) => id === link.id
-              );
-              votedLink.votes = vote.link.votes;
-
-              store.writeQuery({ query: FEED_QUERY, data });
-            }}
+            update={updateStoreAfterVote}
           >
             {voteMutation => (
               <div

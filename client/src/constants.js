@@ -1,4 +1,5 @@
 export const AUTH_TOKEN = "auth-token";
+export const LINKS_PER_PAGE = 5;
 export const milliSecondsPerMinute = 60 * 1000;
 export const milliSecondsPerHour = milliSecondsPerMinute * 60;
 export const milliSecondsPerDay = milliSecondsPerHour * 24;
