@@ -1,29 +1,11 @@
 import React from "react";
 
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
 import { timeDifferenceForDate } from "../utils";
 import { AUTH_TOKEN } from "../constants";
 
-const VOTE_MUTATION = gql`
-  mutation VoteMutation($linkId: ID!) {
-    vote(linkId: $linkId) {
-      id
-      link {
-        votes {
-          id
-          user {
-            id
-          }
-        }
-      }
-      user {
-        id
-      }
-    }
-  }
-`;
+import { VOTE_MUTATION, FEED_QUERY } from "../resolvers";
 
 function Link({ link, index }) {
   const authToken = localStorage.getItem(AUTH_TOKEN);
@@ -32,7 +14,20 @@ function Link({ link, index }) {
       <div className="flex items-center">
         <span className="gray">{index + 1}.</span>
         {authToken && (
-          <Mutation mutation={VOTE_MUTATION} variables={{ linkId: link.id }}>
+          <Mutation
+            mutation={VOTE_MUTATION}
+            variables={{ linkId: link.id }}
+            update={(store, { data: { vote } }) => {
+              const data = store.readQuery({ query: FEED_QUERY });
+
+              const votedLink = data.feed.links.find(
+                ({ id }) => id === link.id
+              );
+              votedLink.votes = vote.link.votes;
+
+              store.writeQuery({ query: FEED_QUERY, data });
+            }}
+          >
             {voteMutation => (
               <div
                 style={{ cursor: "pointer" }}

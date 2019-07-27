@@ -1,17 +1,7 @@
 import React, { useState } from "react";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 
-const POST_MUTATION = gql`
-  mutation PostMutation($description: String!, $url: String!) {
-    post(description: $description, url: $url) {
-      id
-      createdAt
-      url
-      description
-    }
-  }
-`;
+import { POST_MUTATION, FEED_QUERY } from "../resolvers";
 
 function CreateLink({ history }) {
   const [description, setDescription] = useState("");
@@ -39,6 +29,14 @@ function CreateLink({ history }) {
         mutation={POST_MUTATION}
         variables={{ description, url }}
         onCompleted={() => history.push("/")}
+        update={(store, { data: { post } }) => {
+          const data = store.readQuery({ query: FEED_QUERY });
+          data.feed.links.unshift(post);
+          store.writeQuery({
+            query: FEED_QUERY,
+            data
+          });
+        }}
       >
         {postMutation => <button onClick={postMutation}>Submit</button>}
       </Mutation>
